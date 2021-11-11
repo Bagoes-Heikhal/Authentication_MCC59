@@ -8,11 +8,10 @@ namespace Authentication_MCC59
     {
         public static List<UserData> types = new();
         public static Dictionary<string, string> confidential = new();
-
+        public static Random rnd = new();
         static void Main(string[] args)
         {            
             bool start = true;
-            confidential.Add("bagoes", "123");
             while(start)
             {
                 Menu();
@@ -20,15 +19,20 @@ namespace Authentication_MCC59
                 switch (choose)
                 {
                     case 1:
+                        Console.Clear();
                         InputData();
+
                         break;
                     case 2:
+                        Console.Clear();
                         ShowUserData();
                         break;
                     case 3:
+                        Console.Clear();
                         Search();
                         break;
                     case 4:
+                        Console.Clear();
                         Login();
                         break;
                     case 5:
@@ -47,48 +51,58 @@ namespace Authentication_MCC59
             string firstName = Console.ReadLine();
             Console.Write("Input last name  : ");
             string lastName = Console.ReadLine();
-            bool start = true;
 
             Console.Write("Input Password   : ");
             string passwordTemp = Console.ReadLine();
-            string password = "";
-            while (start)
+            string password = InputPassword(passwordTemp);
+   
+            try
             {
-                if (PasswordInput(passwordTemp))
-                {
-                    password = passwordTemp;
-                    start = false;
-                }
-                else
-                {
-                    Console.Write("Please try again");
-                    Console.Write("Input Password   :");
-                    passwordTemp = Console.ReadLine();
-                }
-            }
-
-            try{
-                UserData user = new UserData(firstName, lastName, password);
-                Console.WriteLine($"Your Id is {user.Id}");
+                UserData user = new(firstName, lastName, password);
+                string id = firstName.Substring(0, 2) + lastName.Substring(0, 2);
+                user.Id = Makeid(id);
                 confidential.Add(user.Id, user.Password);
                 types.Add(user);
-            }catch(ArgumentOutOfRangeException)
-            {
-                Console.WriteLine("Please insert each name more than 1 character");
+                //Console.Clear();
+                Console.WriteLine("Your account have been made");
+                Console.WriteLine($"Your ID : {user.Id}");
+                Console.WriteLine($"Your Password {user.Password}");
             }
-}
+            catch(ArgumentOutOfRangeException)
+            {
+                Console.Clear();
+                Console.WriteLine("Please input name with more than 1 character");
+            }
+        }
+
+        public static string Makeid(string id)
+        {
+            string idTemp = id;
+            bool start = confidential.ContainsKey(id);
+            while (start)
+            {
+                Console.WriteLine("ID sama");
+                int randomNumber1 = rnd.Next(11, 99);
+                idTemp = id + randomNumber1;
+                start = confidential.ContainsKey(idTemp);
+            } 
+            return idTemp;
+        }
 
         public static void ShowUserData()
         {
             foreach (var item in types)
             {
+                Console.WriteLine("============================== \n");
                 Console.WriteLine($"Full Name : {item.FirstName} {item.LastName}");
                 Console.WriteLine($"Password : {item.Password}");
+                Console.WriteLine("============================== \n");
             }
         }
 
         public static void Menu()
         {
+            Console.WriteLine("==============================");
             Console.WriteLine("1. Input");
             Console.WriteLine("2. Show Data");
             Console.WriteLine("3. Search Password");
@@ -149,7 +163,7 @@ namespace Authentication_MCC59
             
         }
 
-        public static bool PasswordInput(string input)
+        public static bool PasswordCheck(string input)
         {
             var hashNumber = new Regex(@"[0-9]");
             var upperChar = new Regex(@"[A-Z]");
@@ -162,15 +176,15 @@ namespace Authentication_MCC59
             {
                 Console.WriteLine("Pasword must have at least  1 numeric value");
             }
-            if (!upperChar.IsMatch(input))
+            else if (!upperChar.IsMatch(input))
             {
                 Console.WriteLine("Pasword must have at least  1 upper case (A-Z)");
             }
-            if (!loweChar.IsMatch(input))
+            else if(!loweChar.IsMatch(input))
             {
                 Console.WriteLine("Pasword must have at least  1 lower case (a-z)");
             }
-            if (input.Length < passwordLength)
+            else if(input.Length < passwordLength)
             {
                 Console.WriteLine("Pasword must be at least 8 character");
             }
@@ -180,6 +194,30 @@ namespace Authentication_MCC59
             }
 
             return start;
+        }
+
+        public static string InputPassword(string passwordTemp)
+        {
+            bool start = true;
+            string password = null;
+            while (start)
+            {
+                if (PasswordCheck(passwordTemp))
+                {
+                    password = passwordTemp;
+                    start = false;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Pasword at least 8 character alphanumeric, one lower case and one upper case");
+                    Console.WriteLine("Please try again");
+                    Console.Write("Input Password   :");
+                    passwordTemp = Console.ReadLine();
+                }
+            }
+
+            return password;
         }
     }
 }
