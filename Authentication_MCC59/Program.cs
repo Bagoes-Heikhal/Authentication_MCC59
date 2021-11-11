@@ -7,7 +7,6 @@ namespace Authentication_MCC59
     {
         public static List<UserData> types = new();
         public static Dictionary<string, string> confidential = new();
-
         static void Main(string[] args)
         {            
             bool start = true;
@@ -24,15 +23,19 @@ namespace Authentication_MCC59
                         ShowUserData();
                         break;
                     case 3:
-                        Login();
+                        Search();
                         break;
                     case 4:
+                        Login();
+                        break;
+                    case 5:
                         start = false;
                         break;
                     default:
                         break;
                 }
             }
+
         }
 
         public static void InputData()
@@ -45,6 +48,7 @@ namespace Authentication_MCC59
             string password = Console.ReadLine();
 
             UserData user = new UserData(firstName, lastName, password);
+            Console.WriteLine($"Your Id is {user.Id}");
             confidential.Add(user.Id, user.Password);
             types.Add(user);
         }
@@ -57,13 +61,16 @@ namespace Authentication_MCC59
                 Console.WriteLine($"Password : {item.Password}");
             }
         }
+
         public static void Menu()
         {
             Console.WriteLine("1. Input");
             Console.WriteLine("2. Show Data");
-            Console.WriteLine("3. Login");
-            Console.WriteLine("4. =========");
+            Console.WriteLine("3. Search Password");
+            Console.WriteLine("4. Login");
+            Console.WriteLine("5. Off");
         }
+
         public static int NumInput()
         {
             int a = 0;
@@ -77,21 +84,36 @@ namespace Authentication_MCC59
             }
             return a;
         }
+
         public static void Login()
         {
-            Console.WriteLine("Input Id : ");
+            Console.Write("Input Id : ");
             string id = Console.ReadLine();
-            Console.WriteLine("Input Password : ");
+            Console.Write("Input Password : ");
             string pass = Console.ReadLine();
 
-            Console.WriteLine(confidential[id]);
-            Console.WriteLine(confidential[pass]);
+            try
+            {
+                if (confidential[id] == pass)
+                {
+                    Console.WriteLine("login berhasil");
+                }
+            }
+            catch(KeyNotFoundException)
+            {
+                Console.WriteLine("Id or Password Wrong, Plase try again");
+            }
 
-            //if (confidential[id] == id && confidential.Contains == pass)
-            //{
-
-            //}
 
         }
+
+        public static void Search()
+        {
+            Console.Write("Input Id : ");
+            string id = Console.ReadLine();
+
+            Console.WriteLine($"Your Password is {confidential[id]}") ;
+        }
+
     }
 }
