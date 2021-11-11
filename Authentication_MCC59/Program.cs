@@ -24,7 +24,7 @@ namespace Authentication_MCC59
                         break;
                     case 2:
                         InsideShow();
-                        Console.Clear();
+                        //Console.Clear();
                         break;
                     case 3:
                         InsideSearch();
@@ -35,10 +35,13 @@ namespace Authentication_MCC59
                         Console.Clear();
                         break;
                     case 5:
+                        InsideDelete();
+                        break;
+                    case 6:
                         StartProgram = false;
                         break;
                     default:
-                        Console.WriteLine("Anda Memasukkan Angka Yang Salah");
+                        Console.WriteLine("Error");
                         break;
                 }
             }  
@@ -63,7 +66,8 @@ namespace Authentication_MCC59
             Console.WriteLine("\t 2. Show User");
             Console.WriteLine("\t 3. Search User");
             Console.WriteLine("\t 4. Login User");
-            Console.WriteLine("\t 5. Exit App");
+            Console.WriteLine("\t 5. Delete User");
+            Console.WriteLine("\t 6. Exit App");
             Console.WriteLine("++++++++++++++++++++++++++++++++++");
             Console.WriteLine(" ");
             Console.WriteLine("Pilih Menu Nomor : ");
@@ -86,9 +90,9 @@ namespace Authentication_MCC59
         static void InsideShow()
         {
             Console.Clear();
-            Console.WriteLine("++++++ Show User ++++++");
             foreach (var n in NewData)
             {
+                Console.WriteLine("++++++ Show User ++++++");
                 Console.WriteLine("+++++++++++++++++++++++++++");
                 Console.WriteLine("Fullname : " + n.FirstName + " " +n.LastName);
                 Console.WriteLine("Username : " + n.UserName);
@@ -130,6 +134,17 @@ namespace Authentication_MCC59
                 Console.WriteLine("\t Incorrect Username or Password, Try Again");
             }
             
+        }
+        static void InsideDelete()
+        {
+            InsideShow();
+            Console.WriteLine(" ");
+            Console.Write("Delete Data Ke (Input Angka) :");
+            int DeleteAt = InputConvert()-1;
+            NewData.RemoveAt(DeleteAt);
+            Console.WriteLine(" ");
+            Console.WriteLine("List Data Terbaru : ");
+            InsideShow();
         }
         
     }
