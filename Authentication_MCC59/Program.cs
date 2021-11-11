@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Authentication_MCC59
 {
@@ -7,9 +8,11 @@ namespace Authentication_MCC59
     {
         public static List<UserData> types = new();
         public static Dictionary<string, string> confidential = new();
+
         static void Main(string[] args)
         {            
             bool start = true;
+            confidential.Add("bagoes", "123");
             while(start)
             {
                 Menu();
@@ -44,14 +47,36 @@ namespace Authentication_MCC59
             string firstName = Console.ReadLine();
             Console.Write("Input last name  : ");
             string lastName = Console.ReadLine();
-            Console.Write("Input Paswword   : ");
-            string password = Console.ReadLine();
+            bool start = true;
 
-            UserData user = new UserData(firstName, lastName, password);
-            Console.WriteLine($"Your Id is {user.Id}");
-            confidential.Add(user.Id, user.Password);
-            types.Add(user);
-        }
+            Console.Write("Input Password   : ");
+            string passwordTemp = Console.ReadLine();
+            string password = "";
+            while (start)
+            {
+                if (PasswordInput(passwordTemp))
+                {
+                    password = passwordTemp;
+                    start = false;
+                }
+                else
+                {
+                    Console.Write("Please try again");
+                    Console.Write("Input Password   :");
+                    passwordTemp = Console.ReadLine();
+                }
+            }
+
+            try{
+                UserData user = new UserData(firstName, lastName, password);
+                Console.WriteLine($"Your Id is {user.Id}");
+                confidential.Add(user.Id, user.Password);
+                types.Add(user);
+            }catch(ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Please insert each name more than 1 character");
+            }
+}
 
         public static void ShowUserData()
         {
@@ -69,6 +94,7 @@ namespace Authentication_MCC59
             Console.WriteLine("3. Search Password");
             Console.WriteLine("4. Login");
             Console.WriteLine("5. Off");
+            Console.WriteLine("==============================");
         }
 
         public static int NumInput()
@@ -101,7 +127,7 @@ namespace Authentication_MCC59
             }
             catch(KeyNotFoundException)
             {
-                Console.WriteLine("Id or Password Wrong, Plase try again");
+                Console.WriteLine("Id or Password Wrong, Plase try again !");
             }
 
 
@@ -111,9 +137,49 @@ namespace Authentication_MCC59
         {
             Console.Write("Input Id : ");
             string id = Console.ReadLine();
+            try
+            {
+                Console.WriteLine($"Your password is {confidential[id]}");
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine("We cannot find your ID");
+            }
 
-            Console.WriteLine($"Your Password is {confidential[id]}") ;
+            
         }
 
+        public static bool PasswordInput(string input)
+        {
+            var hashNumber = new Regex(@"[0-9]");
+            var upperChar = new Regex(@"[A-Z]");
+            var loweChar = new Regex(@"[a-z]");
+            int passwordLength = 8;
+
+            bool start = false;
+
+            if (!hashNumber.IsMatch(input))
+            {
+                Console.WriteLine("Pasword must have at least  1 numeric value");
+            }
+            if (!upperChar.IsMatch(input))
+            {
+                Console.WriteLine("Pasword must have at least  1 upper case (A-Z)");
+            }
+            if (!loweChar.IsMatch(input))
+            {
+                Console.WriteLine("Pasword must have at least  1 lower case (a-z)");
+            }
+            if (input.Length < passwordLength)
+            {
+                Console.WriteLine("Pasword must be at least 8 character");
+            }
+            else
+            {
+                start = true;
+            }
+
+            return start;
+        }
     }
 }
