@@ -94,9 +94,10 @@ namespace Authentication_MCC59
             foreach (var item in types)
             {
                 Console.WriteLine("============================== \n");
-                Console.WriteLine($"Full Name : {item.FirstName} {item.LastName}");
-                Console.WriteLine($"Password : {item.Password}");
-                Console.WriteLine("============================== \n");
+                Console.WriteLine($"Full Name  : {item.FirstName} {item.LastName}");
+                Console.WriteLine($"Your Id is :{item.Id}");
+                Console.WriteLine($"Password   : {item.Password}\n");
+                Console.WriteLine("============================== ");
             }
         }
 
@@ -150,17 +151,22 @@ namespace Authentication_MCC59
         public static void Search()
         {
             Console.Write("Input Id : ");
-            string id = Console.ReadLine();
-            try
+            string name = Console.ReadLine();
+            foreach (var item in types)
             {
-                Console.WriteLine($"Your password is {confidential[id]}");
+                if (item.FirstName == name || item.LastName == name || item.Id == name)
+                {
+                    Console.WriteLine("============================");
+                    Console.WriteLine($"First Name : {item.FirstName}");
+                    Console.WriteLine($"Last Name  : {item.LastName}");
+                    Console.WriteLine($"Id         : {item.Id }");
+                    Console.WriteLine($"Password   : {item.Password}");
+                }
+                else
+                {
+                    Console.WriteLine("User not found");
+                }
             }
-            catch (KeyNotFoundException)
-            {
-                Console.WriteLine("We cannot find your ID");
-            }
-
-            
         }
 
         public static bool PasswordCheck(string input)
