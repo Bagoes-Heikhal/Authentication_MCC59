@@ -10,11 +10,12 @@ namespace Authentication_MCC59
         public static Dictionary<string, string> confidential = new();
         public static Random rnd = new();
         static void Main(string[] args)
-        {            
+        {
             bool start = true;
             while(start)
             {
                 Menu();
+                Console.Write("Choose your action : ");
                 int choose = NumInput();
                 switch (choose)
                 {
@@ -66,10 +67,10 @@ namespace Authentication_MCC59
                 user.Id = Makeid(id);
                 confidential.Add(user.Id, user.Password);
                 types.Add(user);
-                //Console.Clear();
+                Console.Clear();
                 Console.WriteLine("Your account have been made");
                 Console.WriteLine($"Your ID : {user.Id}");
-                Console.WriteLine($"Your Password {user.Password}");
+                Console.WriteLine($"Your Password {passwordTemp}");
             }
             catch(ArgumentOutOfRangeException)
             {
@@ -136,17 +137,21 @@ namespace Authentication_MCC59
             string id = Console.ReadLine();
             Console.Write("Input Password : ");
             string pass = Console.ReadLine();
-
             try
             {
-                if (confidential[id] == pass)
+
+                if (BCrypt.Net.BCrypt.Verify(pass, confidential[id]))
                 {
-                    Console.WriteLine("login berhasil");
+                    Console.WriteLine("Login Sucsessfull");
+                }
+                else
+                {
+                    Console.WriteLine("Password Wrong, Plase try again !");
                 }
             }
             catch(KeyNotFoundException)
             {
-                Console.WriteLine("Id or Password Wrong, Plase try again !");
+                Console.WriteLine("Cant fint your ID, Plase try again !");
             }
 
 
@@ -215,7 +220,7 @@ namespace Authentication_MCC59
             {
                 if (PasswordCheck(passwordTemp))
                 {
-                    password = passwordTemp;
+                    password = BCrypt.Net.BCrypt.HashPassword(passwordTemp);;
                     start = false;
                 }
                 else
@@ -235,22 +240,23 @@ namespace Authentication_MCC59
         {
             ShowUserData();
 
+            Console.Clear();
             Console.Write("Delete by input first or last name or ID : ");
             string name = Console.ReadLine();
-            int i = -1;
-            foreach (var item in types)
+
+            for (var i = 0; i < types.Count; i++)
             {
-                i++;
-                if (item.FirstName == name || item.LastName == name || item.Id == name)
+                if (types[i].Id == name)
                 {
-                    types.Remove(item);
-                    confidential.Remove(item.Id);
+                    confidential.Remove(types[i].Id);
+                    types.RemoveAt(i);
                     Console.WriteLine("Data Deleted");
                 }
                 else
                 {
                     Console.WriteLine("User not found");
                 }
+
             }
         }
     }
