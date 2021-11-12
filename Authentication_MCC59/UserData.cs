@@ -14,11 +14,12 @@ namespace Authentication_MCC59
         public string Id { get; set; }
         public string Password { get; set; }
 
-        public UserData(string firstName, string lastName, string password)
+        public UserData(string firstName, string lastName, string password, string id)
         {
             FirstName = firstName;
             LastName = lastName;
             Password = password;
+            Id = id;
         }
 
 

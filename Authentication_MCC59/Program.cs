@@ -6,8 +6,7 @@ namespace Authentication_MCC59
 {
     class Program
     {
-        public static List<UserData> types = new();
-        public static Dictionary<string, string> confidential = new();
+        public static Dictionary<string, UserData> confidential = new();
         public static Random rnd = new();
         static void Main(string[] args)
         {
@@ -62,14 +61,12 @@ namespace Authentication_MCC59
    
             try
             {
-                UserData user = new(firstName, lastName, password);
-                string id = firstName.Substring(0, 2) + lastName.Substring(0, 2);
-                user.Id = Makeid(id);
-                confidential.Add(user.Id, user.Password);
-                types.Add(user);
+                string tempId = firstName.Substring(0, 2) + lastName.Substring(0, 2);
+                string id = Makeid(tempId);
+                confidential.Add(id, new UserData(firstName, lastName, password, id));
                 Console.Clear();
                 Console.WriteLine("Your account have been made");
-                Console.WriteLine($"Your ID : {user.Id}");
+                Console.WriteLine($"Your ID : {id}");
                 Console.WriteLine($"Your Password {passwordTemp}");
             }
             catch(ArgumentOutOfRangeException)
@@ -95,13 +92,35 @@ namespace Authentication_MCC59
 
         static void ShowUserData()
         {
-            foreach (var item in types)
+            foreach (var item in confidential)
             {
                 Console.WriteLine("============================== \n");
-                Console.WriteLine($"Full Name  : {item.FirstName} {item.LastName}");
-                Console.WriteLine($"Your Id is : {item.Id}");
-                Console.WriteLine($"Password   : {item.Password}\n");
+                Console.WriteLine($"Full Name  : {item.Value.FirstName} {item.Value.LastName}");
+                Console.WriteLine($"Your Id is : {item.Value.Id}");
+                Console.WriteLine($"Password   : {item.Value.Password}\n");
                 Console.WriteLine("============================== ");
+            }
+        }
+
+        static void Search()
+        {
+            Console.Write("Input Id : ");
+            string name = Console.ReadLine();
+            foreach (var item in confidential)
+            {
+                if (item.Value.FirstName == name || item.Value.LastName == name || item.Value.Id == name)
+                {
+                    Console.WriteLine("============================\n");
+                    Console.WriteLine($"First Name : {item.Value.FirstName}");
+                    Console.WriteLine($"Last Name  : {item.Value.LastName}");
+                    Console.WriteLine($"Id         : {item.Value.Id}");
+                    Console.WriteLine($"Password   : {item.Value.Password}\n");
+                    Console.WriteLine("============================\n");
+                }
+                else
+                {
+                    Console.WriteLine("User not found");
+                }
             }
         }
 
@@ -140,7 +159,7 @@ namespace Authentication_MCC59
             try
             {
 
-                if (BCrypt.Net.BCrypt.Verify(pass, confidential[id]))
+                if (BCrypt.Net.BCrypt.Verify(pass, confidential[id].Password))
                 {
                     Console.WriteLine("Login Sucsessfull");
                 }
@@ -155,28 +174,6 @@ namespace Authentication_MCC59
             }
 
 
-        }
-
-        static void Search()
-        {
-            Console.Write("Input Id : ");
-            string name = Console.ReadLine();
-            foreach (var item in types)
-            {
-                if (item.FirstName == name || item.LastName == name || item.Id == name)
-                {
-                    Console.WriteLine("============================\n");
-                    Console.WriteLine($"First Name : {item.FirstName}");
-                    Console.WriteLine($"Last Name  : {item.LastName}");
-                    Console.WriteLine($"Id         : {item.Id }");
-                    Console.WriteLine($"Password   : {item.Password}\n");
-                    Console.WriteLine("============================\n");
-                }
-                else
-                {
-                    Console.WriteLine("User not found");
-                }
-            }
         }
 
         static bool PasswordCheck(string input)
@@ -239,25 +236,19 @@ namespace Authentication_MCC59
         static void Delete()
         {
             ShowUserData();
-
             Console.Clear();
-            Console.Write("Delete by input first or last name or ID : ");
+            Console.Write("Delete by input user ID : ");
             string name = Console.ReadLine();
 
-            for (var i = 0; i < types.Count; i++)
+            if (confidential.ContainsKey(name))
             {
-                if (types[i].Id == name)
-                {
-                    confidential.Remove(types[i].Id);
-                    types.RemoveAt(i);
-                    Console.WriteLine("Data Deleted");
-                }
-                else
-                {
-                    Console.WriteLine("User not found");
-                }
-
+                confidential.Remove(name);
             }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("ID Not Found!");
+            }        
         }
     }
 }
