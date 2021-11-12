@@ -36,6 +36,9 @@ namespace Authentication_MCC59
                         Login();
                         break;
                     case 5:
+                        Delete();
+                        break;
+                    case 6:
                         start = false;
                         break;
                     default:
@@ -45,7 +48,7 @@ namespace Authentication_MCC59
 
         }
 
-        public static void InputData()
+        static void InputData()
         {
             Console.Write("Input first name : ");
             string firstName = Console.ReadLine();
@@ -75,7 +78,7 @@ namespace Authentication_MCC59
             }
         }
 
-        public static string Makeid(string id)
+        static string Makeid(string id)
         {
             string idTemp = id;
             bool start = confidential.ContainsKey(id);
@@ -89,30 +92,31 @@ namespace Authentication_MCC59
             return idTemp;
         }
 
-        public static void ShowUserData()
+        static void ShowUserData()
         {
             foreach (var item in types)
             {
                 Console.WriteLine("============================== \n");
                 Console.WriteLine($"Full Name  : {item.FirstName} {item.LastName}");
-                Console.WriteLine($"Your Id is :{item.Id}");
+                Console.WriteLine($"Your Id is : {item.Id}");
                 Console.WriteLine($"Password   : {item.Password}\n");
                 Console.WriteLine("============================== ");
             }
         }
 
-        public static void Menu()
+        static void Menu()
         {
             Console.WriteLine("==============================");
             Console.WriteLine("1. Input");
             Console.WriteLine("2. Show Data");
-            Console.WriteLine("3. Search Password");
+            Console.WriteLine("3. Search");
             Console.WriteLine("4. Login");
-            Console.WriteLine("5. Off");
+            Console.WriteLine("5. Delete");
+            Console.WriteLine("6. Off");
             Console.WriteLine("==============================");
         }
 
-        public static int NumInput()
+        static int NumInput()
         {
             int a = 0;
             try
@@ -126,7 +130,7 @@ namespace Authentication_MCC59
             return a;
         }
 
-        public static void Login()
+        static void Login()
         {
             Console.Write("Input Id : ");
             string id = Console.ReadLine();
@@ -148,7 +152,7 @@ namespace Authentication_MCC59
 
         }
 
-        public static void Search()
+        static void Search()
         {
             Console.Write("Input Id : ");
             string name = Console.ReadLine();
@@ -156,11 +160,12 @@ namespace Authentication_MCC59
             {
                 if (item.FirstName == name || item.LastName == name || item.Id == name)
                 {
-                    Console.WriteLine("============================");
+                    Console.WriteLine("============================\n");
                     Console.WriteLine($"First Name : {item.FirstName}");
                     Console.WriteLine($"Last Name  : {item.LastName}");
                     Console.WriteLine($"Id         : {item.Id }");
-                    Console.WriteLine($"Password   : {item.Password}");
+                    Console.WriteLine($"Password   : {item.Password}\n");
+                    Console.WriteLine("============================\n");
                 }
                 else
                 {
@@ -169,7 +174,7 @@ namespace Authentication_MCC59
             }
         }
 
-        public static bool PasswordCheck(string input)
+        static bool PasswordCheck(string input)
         {
             var hashNumber = new Regex(@"[0-9]");
             var upperChar = new Regex(@"[A-Z]");
@@ -202,7 +207,7 @@ namespace Authentication_MCC59
             return start;
         }
 
-        public static string InputPassword(string passwordTemp)
+        static string InputPassword(string passwordTemp)
         {
             bool start = true;
             string password = null;
@@ -224,6 +229,29 @@ namespace Authentication_MCC59
             }
 
             return password;
+        }
+
+        static void Delete()
+        {
+            ShowUserData();
+
+            Console.Write("Delete by input first or last name or ID : ");
+            string name = Console.ReadLine();
+            int i = -1;
+            foreach (var item in types)
+            {
+                i++;
+                if (item.FirstName == name || item.LastName == name || item.Id == name)
+                {
+                    types.Remove(item);
+                    confidential.Remove(item.Id);
+                    Console.WriteLine("Data Deleted");
+                }
+                else
+                {
+                    Console.WriteLine("User not found");
+                }
+            }
         }
     }
 }
