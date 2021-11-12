@@ -6,8 +6,10 @@ namespace Authentication_MCC59
 {
     class Program
     {
-        public static Dictionary<string, UserData> confidential = new();
-        public static Random rnd = new();
+        static Dictionary<string, UserData> confidential = new();
+
+        static Random rnd = new();
+
         static void Main(string[] args)
         {
             bool start = true;
@@ -45,7 +47,6 @@ namespace Authentication_MCC59
                         break;
                 }
             }
-
         }
 
         static void InputData()
@@ -158,7 +159,6 @@ namespace Authentication_MCC59
             string pass = Console.ReadLine();
             try
             {
-
                 if (BCrypt.Net.BCrypt.Verify(pass, confidential[id].Password))
                 {
                     Console.WriteLine("Login Sucsessfull");
@@ -178,6 +178,7 @@ namespace Authentication_MCC59
 
         static bool PasswordCheck(string input)
         {
+            // Jelasin alasan method ini dibuat
             var hashNumber = new Regex(@"[0-9]");
             var upperChar = new Regex(@"[A-Z]");
             var loweChar = new Regex(@"[a-z]");
@@ -250,5 +251,9 @@ namespace Authentication_MCC59
                 Console.WriteLine("ID Not Found!");
             }        
         }
+
+        //Menu Edit - sania
+        //Masukan password sekali lagi 
+        //
     }
 }

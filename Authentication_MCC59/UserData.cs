@@ -21,9 +21,5 @@ namespace Authentication_MCC59
             Password = password;
             Id = id;
         }
-
-
     }
-
-
 }
