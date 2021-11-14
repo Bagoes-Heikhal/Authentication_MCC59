@@ -11,48 +11,48 @@ namespace Authentication_MCC59
         static Random rnd = new();
 
         static void Main(string[] args)
+        {
+            bool start = true;
+            while (start)
             {
-                bool start = true;
-                while (start)
+                Menu();
+                Console.WriteLine(" ");
+                Console.Write("Choose Your Action : ");
+                int choose = NumInput();
+                switch (choose)
                 {
-                    Menu();
-                    Console.WriteLine(" ");
-                    Console.Write("Choose Your Action : ");
-                    int choose = NumInput();
-                    switch (choose)
-                    {
-                        case 1:
-                            Console.Clear();
-                            InputData();
+                    case 1:
+                        Console.Clear();
+                        InputData();
 
-                            break;
-                        case 2:
-                            Console.Clear();
-                            ShowUserData();
-                            break;
-                        case 3:
-                            Console.Clear();
-                            Edit();
-                            break;
-                        case 4:
-                            Console.Clear();
-                            Search();
-                            break;
-                        case 5:
-                            Console.Clear();
-                            Login();
-                            break;
-                        case 6:
-                            Delete();
-                            break;
-                        case 7:
-                            start = false;
-                            break;
-                        default:
-                            break;
-                    }
+                        break;
+                    case 2:
+                        Console.Clear();
+                        ShowUserData();
+                        break;
+                    case 3:
+                        Console.Clear();
+                        Edit();
+                        break;
+                    case 4:
+                        Console.Clear();
+                        Search();
+                        break;
+                    case 5:
+                        Console.Clear();
+                        Login();
+                        break;
+                    case 6:
+                        Delete();
+                        break;
+                    case 7:
+                        start = false;
+                        break;
+                    default:
+                        break;
                 }
             }
+        }
 
         static void InputData()
         {
@@ -69,7 +69,7 @@ namespace Authentication_MCC59
             string passwordTemp2 = Console.ReadLine();
             if (passwordTemp == passwordTemp2)
             {
-                string password = InputPassword(passwordTemp);   
+                string password = InputPassword(passwordTemp);
                 try
                 {
                     string tempId = firstName.Substring(0, 2) + lastName.Substring(0, 2);
@@ -115,17 +115,17 @@ namespace Authentication_MCC59
         }
 
         static void ShowUserData()
+        {
+            foreach (var item in confidential)
             {
-                foreach (var item in confidential)
-                {
-                    Console.WriteLine("\t++++++ Show User ++++++");
-                    Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                    Console.WriteLine($"\tFull Name  : {item.Value.FirstName} {item.Value.LastName}");
-                    Console.WriteLine($"\tID : {item.Value.Id}");
-                    Console.WriteLine($"\tPassword   : {item.Value.Password}\n");
-                    Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                }
+                Console.WriteLine("\t++++++ Show User ++++++");
+                Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine($"\tFull Name  : {item.Value.FirstName} {item.Value.LastName}");
+                Console.WriteLine($"\tID : {item.Value.Id}");
+                Console.WriteLine($"\tPassword   : {item.Value.Password}\n");
+                Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
             }
+        }
 
         static void Search()
         {
@@ -326,50 +326,12 @@ namespace Authentication_MCC59
                 Console.WriteLine("\t+++++++++++++++++++++++++++");
             }
             ShowUserData();
-                
+
         }
 
         static void Edit()
         {
-            string password = PasswordExample.ReadPassword();
-            bool start = false;
-            while(start)
-            {
-                MenuEdit();
-                Console.Write("Choose Your Action : ");
-                int choose = NumInput();
-                switch (choose)
-                {
-                    case 1:
-                        Console.Clear();
-                        InputData();
 
-                        break;
-                    case 2:
-                        Console.Clear();
-                        ShowUserData();
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Search();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        Login();
-                        break;
-                    case 5:
-                        Delete();
-                        break;
-                    case 6:
-                        Edit();
-                        break;
-                    case 7:
-                        start = false;
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
     }
 
