@@ -6,9 +6,9 @@ namespace Authentication_MCC59
 {
     class Program
     {
-        static Dictionary<string, UserData> confidential = new();
+        static Dictionary<string, UserData> Confidential = new();
 
-        static Random rnd = new();
+        static Random Rnd = new();
 
         static void Main(string[] args)
         {
@@ -16,7 +16,6 @@ namespace Authentication_MCC59
             while (start)
             {
                 Menu();
-                Console.WriteLine(" ");
                 Console.Write("Choose Your Action : ");
                 int choose = NumInput();
                 switch (choose)
@@ -24,7 +23,6 @@ namespace Authentication_MCC59
                     case 1:
                         Console.Clear();
                         InputData();
-
                         break;
                     case 2:
                         Console.Clear();
@@ -65,58 +63,46 @@ namespace Authentication_MCC59
 
             Console.Write("Input Password   : ");
             string passwordTemp = Console.ReadLine();
-            Console.WriteLine("Input Confirmation Password");
-            string passwordTemp2 = Console.ReadLine();
-            if (passwordTemp == passwordTemp2)
+            string password = InputPassword(passwordTemp);
+            try
             {
-                string password = InputPassword(passwordTemp);
-                try
-                {
-                    string tempId = firstName.Substring(0, 2) + lastName.Substring(0, 2);
-                    string id = Makeid(tempId);
-                    confidential.Add(id, new UserData(firstName, lastName, password, id));
-                    Console.Clear();
-                    Console.WriteLine("++++++ Data User ++++++");
-                    Console.WriteLine("+++++++++++++++++++++++++");
-                    Console.WriteLine("Your Account Have Been Made");
-                    Console.WriteLine($"Your ID : {id}");
-                    Console.WriteLine($"Your Password {passwordTemp}");
-                    Console.WriteLine("+++++++++++++++++++++++++");
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    Console.Clear();
-                    Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
-                    Console.WriteLine("Please Input Name With More Than 1 Character");
-                    Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
-                }
+                string tempId = firstName.Substring(0, 2) + lastName.Substring(0, 2);
+                string id = Makeid(tempId);
+                Confidential.Add(id, new UserData(firstName, lastName, password, id));
+                Console.Clear();
+                Console.WriteLine("\t++++++ Data User ++++++");
+                Console.WriteLine("\t+++++++++++++++++++++++++");
+                Console.WriteLine("\tYour Account Have Been Made");
+                Console.WriteLine($"\tYour ID : {id}");
+                Console.WriteLine($"\tYour Password {passwordTemp}");
+                Console.WriteLine("\t+++++++++++++++++++++++++\n");
             }
-            else
+            catch (ArgumentOutOfRangeException)
             {
-                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                Console.WriteLine("Your Password and Confirmation Password Isn't Match");
-                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.Clear();
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Please Input Name With More Than 1 Character");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
             }
-
         }
 
         static string Makeid(string id)
         {
             string idTemp = id;
-            bool start = confidential.ContainsKey(id);
+            bool start = Confidential.ContainsKey(id);
             while (start)
             {
                 Console.WriteLine("Same ID");
                 int randomNumber1 = rnd.Next(11, 99);
                 idTemp = id + randomNumber1;
-                start = confidential.ContainsKey(idTemp);
+                start = Confidential.ContainsKey(idTemp);
             }
             return idTemp;
         }
 
         static void ShowUserData()
         {
-            foreach (var item in confidential)
+            foreach (var item in Confidential)
             {
                 Console.WriteLine("\t++++++ Show User ++++++");
                 Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -133,7 +119,7 @@ namespace Authentication_MCC59
             Console.WriteLine("+++++++++++++++++++++++++++");
             Console.Write("Input ID : ");
             string name = Console.ReadLine();
-            foreach (var item in confidential)
+            foreach (var item in Confidential)
             {
                 if (item.Value.FirstName == name || item.Value.LastName == name || item.Value.Id == name)
                 {
@@ -162,7 +148,7 @@ namespace Authentication_MCC59
             Console.WriteLine("\t5. Login User");
             Console.WriteLine("\t6. Delete User");
             Console.WriteLine("\t7. Exit App");
-            Console.WriteLine("\t++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("\t++++++++++++++++++++++++++++++++++\n");
         }
 
         static void MenuEdit()
@@ -171,7 +157,8 @@ namespace Authentication_MCC59
             Console.WriteLine("\t+++++++++++++++++++++++++++");
             Console.WriteLine("\t1. Edit Username");
             Console.WriteLine("\t2. Edit FirstName");
-            Console.WriteLine("\t3. Edit Password");
+            Console.WriteLine("\t3. Edit Lastname");
+            Console.WriteLine("\t4. Edit Password");
             Console.WriteLine("\t+++++++++++++++++++++++++++");
         }
 
@@ -199,23 +186,23 @@ namespace Authentication_MCC59
             Console.Write("Input ID : ");
             string id = Console.ReadLine();
             Console.Write("Input Password : ");
-            string pass = Console.ReadLine();
+            string pass = ReadPassword();
             Console.WriteLine("+++++++++++++++++++++++++++");
             try
             {
-                if (BCrypt.Net.BCrypt.Verify(pass, confidential[id].Password))
+                if (BCrypt.Net.BCrypt.Verify(pass, Confidential[id].Password))
                 {
                     Console.WriteLine("");
                     Console.WriteLine("++++++++++++++++++++++++++++++++++");
                     Console.WriteLine("Login Successful!");
-                    Console.WriteLine("++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++\n");
                 }
                 else
                 {
                     Console.WriteLine("");
                     Console.WriteLine("++++++++++++++++++++++++++++++++++");
                     Console.WriteLine("Password isn't match, Please Try Again!");
-                    Console.WriteLine("++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++\n");
                 }
             }
             catch (KeyNotFoundException)
@@ -223,10 +210,8 @@ namespace Authentication_MCC59
                 Console.WriteLine("");
                 Console.WriteLine("++++++++++++++++++++++++++++++++++");
                 Console.WriteLine("ID Not Found, Please Try Again!");
-                Console.WriteLine("++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++\n");
             }
-
-
         }
 
         static bool PasswordCheck(string input)
@@ -271,20 +256,34 @@ namespace Authentication_MCC59
             {
                 start = true;
             }
-
             return start;
         }
 
         static string InputPassword(string passwordTemp)
         {
             bool start = true;
+            bool start2 = true;
             string password = null;
             while (start)
             {
                 if (PasswordCheck(passwordTemp))
                 {
-                    password = BCrypt.Net.BCrypt.HashPassword(passwordTemp); ;
-                    start = false;
+                    Console.Write("comfrim your password password : ");
+                    string passwordTemp2 = Console.ReadLine();
+                    while (start2)
+                    {
+                        if (passwordTemp == passwordTemp2)
+                        {
+                            password = BCrypt.Net.BCrypt.HashPassword(passwordTemp);
+                            start = false;
+                            start2 = false;
+                        }
+                        else
+                        {
+                            Console.Write("Please enter you comfimation password again : ");
+                            passwordTemp2 = Console.ReadLine();
+                        }
+                    }
                 }
                 else
                 {
@@ -297,7 +296,6 @@ namespace Authentication_MCC59
                     passwordTemp = Console.ReadLine();
                 }
             }
-
             return password;
         }
 
@@ -309,9 +307,9 @@ namespace Authentication_MCC59
             Console.WriteLine("+++++++++++++++++++++++++++");
             Console.Write("Delete Data (Input Number) :");
             string Name = Console.ReadLine();
-            if (confidential.ContainsKey(Name))
+            if (Confidential.ContainsKey(Name))
             {
-                confidential.Remove(Name);
+                Confidential.Remove(Name);
                 Console.WriteLine("");
                 Console.WriteLine("\t+++++++++++++++++++++++++++");
                 Console.WriteLine("\tData Deleted!");
@@ -326,109 +324,87 @@ namespace Authentication_MCC59
                 Console.WriteLine("\t+++++++++++++++++++++++++++");
             }
             ShowUserData();
-
         }
 
         static void Edit()
         {
             Console.Write("Input Id : ");
-            string name = Console.ReadLine();
-            foreach (var item in confidential)
+            string id = Console.ReadLine();
+            if (Confidential.ContainsKey(id))
             {
                 MenuEdit();
-                if (item.Value.Id == name)
+                Console.Write("Choose your action : ");
+                int choose = NumInput();
+                switch (choose)
                 {
-                    Console.Write("Choose your action : ");
-                    int choose = NumInput();
-                    switch (choose)
-                    {
-                        case 1:
-                            Console.WriteLine("Masukkan Username Baru");
-                            string nametmp = Console.ReadLine();
-                            if (item.Value.Id != nametmp)
-                            {
-                                item.Value.Id = nametmp;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Username Sudah Digunakan");
-                            }
-                            break;
-                        case 2:
-                            Console.WriteLine("Masukkan First Name");
-                            string firsttmp = Console.ReadLine();
-                            item.Value.FirstName = firsttmp;
-                            break;
-                        case 3:
-                            Console.WriteLine("Masukkan Password Baru");
-                            string passtmp = Console.ReadLine();
-                            Console.WriteLine("Masukkan Ulang Password Baru");
-                            string passtmp2 = Console.ReadLine();
-                            if (passtmp == passtmp2)
-                            {
-                                string password = InputPassword(passtmp);
-                                item.Value.Password = password;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Password dan Konfirmasi Password tidak sama");
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                    case 1:
+                        Console.WriteLine("Insert new id : ");
+                        string nameTmp = Console.ReadLine();
+                        if (Confidential.ContainsKey(nameTmp))
+                        {
+                            Console.Write("Id have been taken : ");
+                        }
+                        else
+                        {
+                            Confidential[id].Id = nameTmp; 
+                        }
+                        break;
+                    case 2:
+                        Console.Write("Insert new Firstname : ");
+                        string firstTmp = Console.ReadLine();
+                        Confidential[id].FirstName = firstTmp;
+                        break;
+                    case 3:
+                        Console.Write("Insert new Lastname : ");
+                        string lastTmp = Console.ReadLine();
+                        Confidential[id].LastName = lastTmp;
+                        break;
+                    case 4:
+                        string passwordTemp = Console.ReadLine();
+                        string password = InputPassword(passwordTemp);
+                        Console.Write("Insert new Password : ");
+                        Confidential[id].Password = password;
+                        break;
+                    default:
+                        break;
                 }
             }
+        }
+
+        static string ReadPassword()
+        {
+            // sourcode : https://stackoverflow.com/questions/29201697/hide-replace-when-typing-a-password-c/29201791
+            string password = "";
+            ConsoleKeyInfo info = Console.ReadKey(true);
+            while (info.Key != ConsoleKey.Enter)
+            {
+                if (info.Key != ConsoleKey.Backspace)
+                {
+                    Console.Write("*");
+                    password += info.KeyChar;
+                }
+                else if (info.Key == ConsoleKey.Backspace)
+                {
+                    if (!string.IsNullOrEmpty(password))
+                    {
+                        // remove one character from the list of password characters
+                        password = password.Substring(0, password.Length - 1);
+                        // get the location of the cursor
+                        int pos = Console.CursorLeft;
+                        // move the cursor to the left by one character
+                        Console.SetCursorPosition(pos - 1, Console.CursorTop);
+                        // replace it with space
+                        Console.Write(" ");
+                        // move the cursor to the left by one character again
+                        Console.SetCursorPosition(pos - 1, Console.CursorTop);
+                    }
+                }
+                info = Console.ReadKey(true);
+            }
+            // add a new line because user pressed enter at the end of their password
+            Console.WriteLine();
+            return password;
         }
     }
-
-    class PasswordExample
-        {
-            //test
-            public static void ReadPassword2()
-            {
-                Console.Write("Input ID :");
-                var loginid = Console.ReadLine();
-                Console.Write("Input Password : ");
-                var password = ReadPassword();
-                Console.Write("Your Password :" + password);
-                Console.ReadLine();
-            }
-
-
-            public static string ReadPassword()
-            {
-                string password = "";
-                ConsoleKeyInfo info = Console.ReadKey(true);
-                while (info.Key != ConsoleKey.Enter)
-                {
-                    if (info.Key != ConsoleKey.Backspace)
-                    {
-                        Console.Write("*");
-                        password += info.KeyChar;
-                    }
-                    else if (info.Key == ConsoleKey.Backspace)
-                    {
-                        if (!string.IsNullOrEmpty(password))
-                        {
-                            // remove one character from the list of password characters
-                            password = password.Substring(0, password.Length - 1);
-                            // get the location of the cursor
-                            int pos = Console.CursorLeft;
-                            // move the cursor to the left by one character
-                            Console.SetCursorPosition(pos - 1, Console.CursorTop);
-                            // replace it with space
-                            Console.Write(" ");
-                            // move the cursor to the left by one character again
-                            Console.SetCursorPosition(pos - 1, Console.CursorTop);
-                        }
-                    }
-                    info = Console.ReadKey(true);
-                }
-                // add a new line because user pressed enter at the end of their password
-                Console.WriteLine();
-                return password;
-            }
-        }
 }
   
