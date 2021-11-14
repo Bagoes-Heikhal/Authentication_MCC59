@@ -259,6 +259,20 @@ namespace Authentication_MCC59
 
         static void Delete()
         {
+            ShowUserData();
+            Console.WriteLine(" ");
+            Console.Write("Delete Data Ke (Input Angka) :");
+            string Name = Console.ReadLine();
+            if (confidential.ContainsKey(Name))
+            {
+                confidential.Remove(Name);
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Username Not Found");
+            }
+            ShowUserData();
                 
         }
 
