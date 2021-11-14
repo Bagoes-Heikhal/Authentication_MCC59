@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Authentication_MCC59
 {
     class Program
     {
-        //Menyimpan Data dalam Bentuk List, Memanggil class DataUsers utk akses ke atribut
-        public static List<DataUsers> NewData = new();
+      
         //Menyimpan Data Username dan Password di Dictionary untuk keperluan searching dan login
-        public static Dictionary<string, string> AuthData = new();
+        public static Dictionary<string, DataUsers> AuthData = new();
+        static Random Rand = new();
+
         static void Main(string[] args)
         {
             bool StartProgram = true;
@@ -82,21 +84,99 @@ namespace Authentication_MCC59
             string InsertLastName = Console.ReadLine();
             Console.Write("Password : ");
             string InsertPassword = Console.ReadLine();
-            DataUsers Users = new DataUsers(InsertFirstName, InsertLastName, InsertPassword);
-            NewData.Add(Users);
-            AuthData.Add(Users.UserName, Users.Password);
-            Console.WriteLine("+++++++++++++++++++++++++");
+            string CheckPass = InputPassword(InsertPassword);
+            try
+            {
+                string UsernameTemp = InsertFirstName.Substring(0, 2) + InsertLastName.Substring(0, 2);
+                string Username = CreateUsername(UsernameTemp);
+                AuthData.Add(Username, new DataUsers(InsertFirstName, InsertLastName, CheckPass, Username));
+                Console.Clear();
+                Console.WriteLine("Your Username : " + Username);
+                Console.WriteLine("Your Password : " + InsertPassword);
+                Console.WriteLine("+++++++++++++++++++++++++");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.Clear();
+                Console.WriteLine("Error");
+            } 
+        }
+        static string CreateUsername(string Username)
+        {
+            string TempUsername = Username;
+            bool Start = AuthData.ContainsKey(Username);
+            while (Start)
+            {
+                Console.WriteLine("Username Serupa");
+                int RandomNumber = Rand.Next(11, 99);
+                TempUsername = Username + RandomNumber;
+                Start = AuthData.ContainsKey(TempUsername);
+            }
+            return TempUsername;
+        }
+        static bool PasswordCheck(string Input)
+        {
+            var HashNumber = new Regex(@"[0-9]");
+            var UpperCase = new Regex(@"[A-Z]");
+            var LowerCase = new Regex(@"[a-z]");
+            int LengthPassword = 8;
+            bool Start = false;
+
+            if (!HashNumber.IsMatch(Input))
+            {
+                Console.WriteLine("Password Must Have at Least 1 Numeric Value");
+            }
+            else if (!UpperCase.IsMatch(Input))
+            {
+                Console.WriteLine("Password Must Have at Least 1 Upper Case (A-Z)");
+            }
+            else if (!LowerCase.IsMatch(Input))
+            {
+                Console.WriteLine("Password Must Have at Least 1 Lower Case (a-z)");
+            }
+            else if (Input.Length < LengthPassword)
+            {
+                Console.WriteLine("Password Must Have at Least 8 Character Consist of 1 Upper Case, 1 Lower Case, 1 Numeric Value");
+            }
+            else
+            {
+                Start = true;
+            }
+            return Start;
+
+        }
+        static string InputPassword(string PasswordTemporary)
+        {
+            bool Start = true;
+            string Pass = null;
+            while (Start)
+            {
+                if (PasswordCheck(PasswordTemporary))
+                {
+                    Pass = BCrypt.Net.BCrypt.HashPassword(PasswordTemporary);
+                    Start = false;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Password Must Have at Least 8 Character Consist of 1 Upper Case, 1 Lower Case, 1 Numeric Value");
+                    Console.WriteLine("Please Try Again");
+                    Console.WriteLine("Input Password : ");
+                    PasswordTemporary = Console.ReadLine();
+                }
+            }
+            return Pass;
         }
         static void InsideShow()
         {
             Console.Clear();
-            foreach (var n in NewData)
+            foreach (var n in AuthData)
             {
                 Console.WriteLine("++++++ Show User ++++++");
                 Console.WriteLine("+++++++++++++++++++++++++++");
-                Console.WriteLine("Fullname : " + n.FirstName + " " +n.LastName);
-                Console.WriteLine("Username : " + n.UserName);
-                Console.WriteLine("Password : " + n.Password);
+                Console.WriteLine("Fullname : " + n.Value.FirstName + " " +n.Value.LastName);
+                Console.WriteLine($"Username : {n.Value.UserName}");
+                Console.WriteLine($"Password : {n.Value.Password}");
                 Console.WriteLine("+++++++++++++++++++++++++++");
             }
         }
@@ -107,10 +187,22 @@ namespace Authentication_MCC59
             Console.WriteLine("+++++++++++++++++++++++++++");
             Console.Write("Username : ");
             string SearchUsername = Console.ReadLine();
-            Console.WriteLine("Your Password is " + AuthData[SearchUsername]);
-            Console.WriteLine("+++++++++++++++++++++++++++");
-
-
+            foreach (var n in AuthData)
+            {
+                if (n.Value.FirstName == SearchUsername || n.Value.LastName == SearchUsername || n.Value.UserName == SearchUsername)
+                {
+                    Console.WriteLine("+++++++++++++++++++++++++++");
+                    Console.WriteLine("Name : " + n.Value.FirstName + " " + n.Value.LastName);
+                    Console.WriteLine($"Username : {n.Value.UserName}");
+                    Console.WriteLine($"Password : {n.Value.Password}");
+                    Console.WriteLine("+++++++++++++++++++++++++++");
+                }
+                else
+                {
+                    Console.WriteLine("Error");
+                }
+            }
+         
         }
         static void InsideLogin()
         {
@@ -124,14 +216,18 @@ namespace Authentication_MCC59
             Console.WriteLine("+++++++++++++++++++++++++++");
             try
             {
-                if(AuthData[LoginUsername] == LoginPassword)
+                if(BCrypt.Net.BCrypt.Verify(LoginPassword, AuthData[LoginUsername].Password)
                 {
                     Console.WriteLine("\t Login Successful!");
+                }
+                else
+                {
+                    Console.WriteLine("\t Incorrect Username or Password, Try Again");
                 }
             }
             catch (KeyNotFoundException)
             {
-                Console.WriteLine("\t Incorrect Username or Password, Try Again");
+                Console.WriteLine("\t Username Not Found");
             }
             
         }
@@ -140,10 +236,16 @@ namespace Authentication_MCC59
             InsideShow();
             Console.WriteLine(" ");
             Console.Write("Delete Data Ke (Input Angka) :");
-            int DeleteAt = InputConvert()-1;
-            NewData.RemoveAt(DeleteAt);
-            Console.WriteLine(" ");
-            Console.WriteLine("List Data Terbaru : ");
+            string Name = Console.ReadLine();
+            if (AuthData.ContainsKey(Name))
+            {
+                AuthData.Remove(Name);
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Username Not Found");
+            }
             InsideShow();
         }
         

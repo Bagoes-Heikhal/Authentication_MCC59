@@ -13,12 +13,12 @@ namespace Authentication_MCC59
         public string Password { get; set; }
         public string UserName { get; set; }
 
-        public DataUsers(string FName, string LName, string Pass)
+        public DataUsers(string FName, string LName, string Pass, string UName)
         {
             FirstName = FName;
             LastName = LName;
             Password = Pass;
-            UserName = FName.Substring(0, 2) + LName.Substring(0, 2);
+            UserName = UName;
         }
     }
 }
