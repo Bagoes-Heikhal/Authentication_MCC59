@@ -121,60 +121,7 @@ namespace Authentication_MCC59
                     Console.WriteLine("============================== ");
                 }
             }
-        static void Edit()
-        {
-            Console.Write("Input Id : ");
-            string name = Console.ReadLine();
-            foreach (var item in confidential)
-            {
-                MenuEdit();
-                if (item.Value.Id == name)
-                {
-                    Console.Write("Choose your action : ");
-                    int choose = NumInput();
-                    switch (choose)
-                    {
-                        case 1:
-                            Console.WriteLine("Masukkan Username Baru");
-                            string nametmp = Console.ReadLine();
-                            if (item.Value.Id != nametmp)
-                            {
-                                item.Value.Id = nametmp;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Username Sudah Digunakan");
-                            }
-                            break;
-                        case 2:
-                            Console.WriteLine("Masukkan First Name");
-                            string firsttmp = Console.ReadLine();
-                            item.Value.FirstName = firsttmp;
-                            break;
-                        case 3:
-                            Console.WriteLine("Masukkan Password Baru");
-                            string passtmp = Console.ReadLine();
-                            Console.WriteLine("Masukkan Ulang Password Baru");
-                            string passtmp2 = Console.ReadLine();
-                            if(passtmp == passtmp2)
-                            {
-                                string password = InputPassword(passtmp);
-                                item.Value.Password = password;
-
-                            }
-                            else
-                            {
-                                Console.WriteLine("Password dan Konfirmasi Password tidak sama");
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-  
-
-                }
-            }
-        }
+        
 
             static void Search()
             {
@@ -318,24 +265,65 @@ namespace Authentication_MCC59
 
             static void Delete()
             {
-                ShowUserData();
-                Console.Clear();
-                Console.Write("Delete by input user ID : ");
-                string name = Console.ReadLine();
-
-                if (confidential.ContainsKey(name))
-                {
-                    confidential.Remove(name);
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("ID Not Found!");
-                }
+                
             }
 
-       
-        
+        static void Edit()
+        {
+            Console.Write("Input Id : ");
+            string name = Console.ReadLine();
+            foreach (var item in confidential)
+            {
+                MenuEdit();
+                if (item.Value.Id == name)
+                {
+                    Console.Write("Choose your action : ");
+                    int choose = NumInput();
+                    switch (choose)
+                    {
+                        case 1:
+                            Console.WriteLine("Masukkan Username Baru");
+                            string nametmp = Console.ReadLine();
+                            if (item.Value.Id != nametmp)
+                            {
+                                item.Value.Id = nametmp;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Username Sudah Digunakan");
+                            }
+                            break;
+                        case 2:
+                            Console.WriteLine("Masukkan First Name");
+                            string firsttmp = Console.ReadLine();
+                            item.Value.FirstName = firsttmp;
+                            break;
+                        case 3:
+                            Console.WriteLine("Masukkan Password Baru");
+                            string passtmp = Console.ReadLine();
+                            Console.WriteLine("Masukkan Ulang Password Baru");
+                            string passtmp2 = Console.ReadLine();
+                            if (passtmp == passtmp2)
+                            {
+                                string password = InputPassword(passtmp);
+                                item.Value.Password = password;
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("Password dan Konfirmasi Password tidak sama");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+
+                }
+            }
+        }
+
+
     }
 }
   
