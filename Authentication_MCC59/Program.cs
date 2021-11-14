@@ -331,44 +331,57 @@ namespace Authentication_MCC59
 
         static void Edit()
         {
-            string password = PasswordExample.ReadPassword();
-            bool start = false;
-            while(start)
+            Console.Write("Input Id : ");
+            string name = Console.ReadLine();
+            foreach (var item in confidential)
             {
                 MenuEdit();
-                Console.Write("Choose Your Action : ");
-                int choose = NumInput();
-                switch (choose)
+                if (item.Value.Id == name)
                 {
-                    case 1:
-                        Console.Clear();
-                        InputData();
+                    Console.Write("Choose your action : ");
+                    int choose = NumInput();
+                    switch (choose)
+                    {
+                        case 1:
+                            Console.WriteLine("Masukkan Username Baru");
+                            string nametmp = Console.ReadLine();
+                            if (item.Value.Id != nametmp)
+                            {
+                                item.Value.Id = nametmp;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Username Sudah Digunakan");
+                            }
+                            break;
+                        case 2:
+                            Console.WriteLine("Masukkan First Name");
+                            string firsttmp = Console.ReadLine();
+                            item.Value.FirstName = firsttmp;
+                            break;
+                        case 3:
+                            Console.WriteLine("Masukkan Password Baru");
+                            string passtmp = Console.ReadLine();
+                            Console.WriteLine("Masukkan Ulang Password Baru");
+                            string passtmp2 = Console.ReadLine();
+                            if (passtmp == passtmp2)
+                            {
+                                string password = InputPassword(passtmp);
+                                item.Value.Password = password;
 
-                        break;
-                    case 2:
-                        Console.Clear();
-                        ShowUserData();
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Search();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        Login();
-                        break;
-                    case 5:
-                        Delete();
-                        break;
-                    case 6:
-                        Edit();
-                        break;
-                    case 7:
-                        start = false;
-                        break;
-                    default:
-                        break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Password dan Konfirmasi Password tidak sama");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+
                 }
+
             }
         }
     }
