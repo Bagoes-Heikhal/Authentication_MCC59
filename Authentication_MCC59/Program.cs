@@ -8,7 +8,7 @@ namespace Authentication_MCC59
     {
         static Dictionary<string, UserData> Confidential = new();
 
-        static Random Rnd = new();
+        static Random Rnd = new ();
 
         static void Main(string[] args)
         {
@@ -93,7 +93,7 @@ namespace Authentication_MCC59
             while (start)
             {
                 Console.WriteLine("Same ID");
-                int randomNumber1 = rnd.Next(11, 99);
+                int randomNumber1 = Rnd.Next(11, 99);
                 idTemp = id + randomNumber1;
                 start = Confidential.ContainsKey(idTemp);
             }
