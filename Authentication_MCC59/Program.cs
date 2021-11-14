@@ -250,55 +250,16 @@ namespace Authentication_MCC59
                     passwordTemp = Console.ReadLine();
                 }
             }
-
             return password;
         }
 
         static void Delete()
         {
-            ShowUserData();
-            Console.Clear();
-            Console.Write("Delete by input user ID : ");
-            string name = Console.ReadLine();
 
-            if (confidential.ContainsKey(name))
-            {
-                confidential.Remove(name);
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("ID Not Found!");
-            }        
         }
 
         static void Edit()
         {
-            Console.Write("Input Id to edit : ");
-            string id = Console.ReadLine();
-            try
-            {
-                if (confidential.ContainsKey(id))
-                {
-                    Console.WriteLine($"Your first name : {confidential[id].FirstName}");
-                    Console.Write("Edit first name : ");
-                    confidential[id].FirstName = Console.ReadLine();
-                    Console.WriteLine($"Your first name : {confidential[id].LastName}");
-                    Console.Write("Edit Input last name  : ");
-                    confidential[id].LastName = Console.ReadLine();
-
-                    Console.Write("Edit Input Password   : ");
-                    confidential[id].Password = Console.ReadLine();
-                    string password = InputPassword(confidential[id].Password);
-
-                    Console.WriteLine("Edit Sucsessfull\n");
-                }
-            }
-            catch (KeyNotFoundException)
-            {
-                Console.WriteLine("Cant fint your ID, Plase try again !");
-            }
-
 
         }
 
