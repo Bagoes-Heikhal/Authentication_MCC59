@@ -267,6 +267,7 @@ namespace Authentication_MCC59
 
     class PasswordExample
         {
+            //test
             public static void ReadPassword2()
             {
                 Console.WriteLine("Pls key in your Login ID");
