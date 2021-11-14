@@ -12,7 +12,8 @@ namespace Authentication_MCC59
 
         static void Main(string[] args)
         {
-            bool start = true;
+            string password = PasswordExample.ReadPassword();
+            bool start = false;
             while(start)
             {
                 Menu();
@@ -41,6 +42,9 @@ namespace Authentication_MCC59
                         Delete();
                         break;
                     case 6:
+                        Edit();
+                        break;
+                    case 7:
                         start = false;
                         break;
                     default:
@@ -133,8 +137,9 @@ namespace Authentication_MCC59
             Console.WriteLine("3. Search");
             Console.WriteLine("4. Login");
             Console.WriteLine("5. Delete");
-            Console.WriteLine("6. Off");
-            Console.WriteLine("==============================");
+            Console.WriteLine("6. Edit");
+            Console.WriteLine("7. Off");
+            Console.WriteLine("==============================\n");
         }
 
         static int NumInput()
@@ -213,13 +218,28 @@ namespace Authentication_MCC59
         static string InputPassword(string passwordTemp)
         {
             bool start = true;
+            bool start2 = true;
             string password = null;
             while (start)
             {
                 if (PasswordCheck(passwordTemp))
                 {
-                    password = BCrypt.Net.BCrypt.HashPassword(passwordTemp);;
-                    start = false;
+                    Console.Write("Enter your password once again : ");
+                    string secondPassword = Console.ReadLine();
+                    while (start2)
+                    {
+                        if (secondPassword == passwordTemp)
+                        {
+                            password = BCrypt.Net.BCrypt.HashPassword(passwordTemp); ;
+                            start = false;
+                            start2 = false;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Password wrong! please try again");
+                            secondPassword = Console.ReadLine();
+                        }
+                    }
                 }
                 else
                 {
@@ -252,8 +272,83 @@ namespace Authentication_MCC59
             }        
         }
 
-        //Menu Edit - sania
-        //Masukan password sekali lagi 
-        //
+        static void Edit()
+        {
+            Console.Write("Input Id to edit : ");
+            string id = Console.ReadLine();
+            try
+            {
+                if (confidential.ContainsKey(id))
+                {
+                    Console.WriteLine($"Your first name : {confidential[id].FirstName}");
+                    Console.Write("Edit first name : ");
+                    confidential[id].FirstName = Console.ReadLine();
+                    Console.WriteLine($"Your first name : {confidential[id].LastName}");
+                    Console.Write("Edit Input last name  : ");
+                    confidential[id].LastName = Console.ReadLine();
+
+                    Console.Write("Edit Input Password   : ");
+                    confidential[id].Password = Console.ReadLine();
+                    string password = InputPassword(confidential[id].Password);
+
+                    Console.WriteLine("Edit Sucsessfull\n");
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine("Cant fint your ID, Plase try again !");
+            }
+
+
+        }
+
     }
+
+    class PasswordExample
+        {
+            public static void ReadPassword2()
+            {
+                Console.WriteLine("Pls key in your Login ID");
+                var loginid = Console.ReadLine();
+                Console.WriteLine("Pls key in your Password");
+                var password = ReadPassword();
+                Console.Write("Your Password is:" + password);
+                Console.ReadLine();
+            }
+
+
+            public static string ReadPassword()
+            {
+                string password = "";
+                ConsoleKeyInfo info = Console.ReadKey(true);
+                while (info.Key != ConsoleKey.Enter)
+                {
+                    if (info.Key != ConsoleKey.Backspace)
+                    {
+                        Console.Write("*");
+                        password += info.KeyChar;
+                    }
+                    else if (info.Key == ConsoleKey.Backspace)
+                    {
+                        if (!string.IsNullOrEmpty(password))
+                        {
+                            // remove one character from the list of password characters
+                            password = password.Substring(0, password.Length - 1);
+                            // get the location of the cursor
+                            int pos = Console.CursorLeft;
+                            // move the cursor to the left by one character
+                            Console.SetCursorPosition(pos - 1, Console.CursorTop);
+                            // replace it with space
+                            Console.Write(" ");
+                            // move the cursor to the left by one character again
+                            Console.SetCursorPosition(pos - 1, Console.CursorTop);
+                        }
+                    }
+                    info = Console.ReadKey(true);
+                }
+                // add a new line because user pressed enter at the end of their password
+                Console.WriteLine();
+                return password;
+            }
+        }
 }
