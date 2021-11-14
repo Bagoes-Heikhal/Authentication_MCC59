@@ -16,7 +16,8 @@ namespace Authentication_MCC59
                 while (start)
                 {
                     Menu();
-                    Console.Write("Choose your action : ");
+                    Console.WriteLine(" ");
+                    Console.Write("Choose Your Action : ");
                     int choose = NumInput();
                     switch (choose)
                     {
@@ -55,14 +56,16 @@ namespace Authentication_MCC59
 
         static void InputData()
         {
-            Console.Write("Input first name : ");
+            Console.WriteLine("++++++ Create User ++++++");
+            Console.WriteLine("+++++++++++++++++++++++++");
+            Console.Write("Input First Name : ");
             string firstName = Console.ReadLine();
-            Console.Write("Input last name  : ");
+            Console.Write("Input Last Name  : ");
             string lastName = Console.ReadLine();
 
             Console.Write("Input Password   : ");
             string passwordTemp = Console.ReadLine();
-            Console.WriteLine("Input Ulang Password");
+            Console.WriteLine("Input Confirmation Password");
             string passwordTemp2 = Console.ReadLine();
             if (passwordTemp == passwordTemp2)
             {
@@ -73,19 +76,26 @@ namespace Authentication_MCC59
                     string id = Makeid(tempId);
                     confidential.Add(id, new UserData(firstName, lastName, password, id));
                     Console.Clear();
-                    Console.WriteLine("Your account have been made");
+                    Console.WriteLine("++++++ Data User ++++++");
+                    Console.WriteLine("+++++++++++++++++++++++++");
+                    Console.WriteLine("Your Account Have Been Made");
                     Console.WriteLine($"Your ID : {id}");
                     Console.WriteLine($"Your Password {passwordTemp}");
+                    Console.WriteLine("+++++++++++++++++++++++++");
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     Console.Clear();
-                    Console.WriteLine("Please input name with more than 1 character");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine("Please Input Name With More Than 1 Character");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
                 }
             }
             else
             {
-                Console.WriteLine("Password dan Konfirmasi Password tidak sama");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Your Password and Confirmation Password Isn't Match");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
             }
 
         }
@@ -96,7 +106,7 @@ namespace Authentication_MCC59
             bool start = confidential.ContainsKey(id);
             while (start)
             {
-                Console.WriteLine("ID sama");
+                Console.WriteLine("Same ID");
                 int randomNumber1 = rnd.Next(11, 99);
                 idTemp = id + randomNumber1;
                 start = confidential.ContainsKey(idTemp);
@@ -108,56 +118,61 @@ namespace Authentication_MCC59
             {
                 foreach (var item in confidential)
                 {
-                    Console.WriteLine("============================== \n");
-                    Console.WriteLine($"Full Name  : {item.Value.FirstName} {item.Value.LastName}");
-                    Console.WriteLine($"Your Id is : {item.Value.Id}");
-                    Console.WriteLine($"Password   : {item.Value.Password}\n");
-                    Console.WriteLine("============================== ");
+                    Console.WriteLine("\t++++++ Show User ++++++");
+                    Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine($"\tFull Name  : {item.Value.FirstName} {item.Value.LastName}");
+                    Console.WriteLine($"\tID : {item.Value.Id}");
+                    Console.WriteLine($"\tPassword   : {item.Value.Password}\n");
+                    Console.WriteLine("\t+++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 }
             }
 
         static void Search()
         {
-            Console.Write("Input Id : ");
+            Console.WriteLine("++++++ Search User ++++++");
+            Console.WriteLine("+++++++++++++++++++++++++++");
+            Console.Write("Input ID : ");
             string name = Console.ReadLine();
             foreach (var item in confidential)
             {
                 if (item.Value.FirstName == name || item.Value.LastName == name || item.Value.Id == name)
                 {
-                    Console.WriteLine("============================\n");
-                    Console.WriteLine($"First Name : {item.Value.FirstName}");
-                    Console.WriteLine($"Last Name  : {item.Value.LastName}");
-                    Console.WriteLine($"Id         : {item.Value.Id}");
-                    Console.WriteLine($"Password   : {item.Value.Password}\n");
-                    Console.WriteLine("============================\n");
+                    Console.WriteLine("\t+++++++++++++++++++++++++++");
+                    Console.WriteLine($"\tFirst Name : {item.Value.FirstName}");
+                    Console.WriteLine($"\tLast Name  : {item.Value.LastName}");
+                    Console.WriteLine($"\tID         : {item.Value.Id}");
+                    Console.WriteLine($"\tPassword   : {item.Value.Password}\n");
+                    Console.WriteLine("\t+++++++++++++++++++++++++++");
                 }
                 else
                 {
-                    Console.WriteLine("User not found");
+                    Console.WriteLine("User Not Found");
                 }
             }
         }
 
         static void Menu()
         {
-            Console.WriteLine("==============================");
-            Console.WriteLine("1. Input");
-            Console.WriteLine("2. Show Data");
-            Console.WriteLine("3. Edit");
-            Console.WriteLine("4. Search");
-            Console.WriteLine("5. Login");
-            Console.WriteLine("6. Delete");
-            Console.WriteLine("7. Off");
-            Console.WriteLine("==============================");
+            Console.WriteLine("\t++++++ Basic Authentication ++++++");
+            Console.WriteLine("\t++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("\t1. Create User");
+            Console.WriteLine("\t2. Show User");
+            Console.WriteLine("\t3. Edit User");
+            Console.WriteLine("\t4. Search User");
+            Console.WriteLine("\t5. Login User");
+            Console.WriteLine("\t6. Delete User");
+            Console.WriteLine("\t7. Exit App");
+            Console.WriteLine("\t++++++++++++++++++++++++++++++++++");
         }
 
         static void MenuEdit()
         {
-            Console.WriteLine("==============================");
-            Console.WriteLine("1. Edit Username");
-            Console.WriteLine("2. Edit FirstName");
-            Console.WriteLine("3. Edit Password");
-            Console.WriteLine("==============================");
+            Console.WriteLine("\t++++++ Edit User ++++++");
+            Console.WriteLine("\t+++++++++++++++++++++++++++");
+            Console.WriteLine("\t1. Edit Username");
+            Console.WriteLine("\t2. Edit FirstName");
+            Console.WriteLine("\t3. Edit Password");
+            Console.WriteLine("\t+++++++++++++++++++++++++++");
         }
 
         static int NumInput()
@@ -169,31 +184,46 @@ namespace Authentication_MCC59
             }
             catch (FormatException e)
             {
-                Console.WriteLine("Please Enter a number !! " + e);
+                Console.WriteLine("");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Please Enter The Correct Number!! " + e);
+                Console.WriteLine("+++++++++++++++++++++++++++++++++");
             }
             return a;
         }
 
         static void Login()
         {
-            Console.Write("Input Id : ");
+            Console.WriteLine("++++++ Login User ++++++");
+            Console.WriteLine("+++++++++++++++++++++++++++");
+            Console.Write("Input ID : ");
             string id = Console.ReadLine();
             Console.Write("Input Password : ");
             string pass = Console.ReadLine();
+            Console.WriteLine("+++++++++++++++++++++++++++");
             try
             {
                 if (BCrypt.Net.BCrypt.Verify(pass, confidential[id].Password))
                 {
-                    Console.WriteLine("Login Sucsessfull");
+                    Console.WriteLine("");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine("Login Successful!");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++");
                 }
                 else
                 {
-                    Console.WriteLine("Password Wrong, Plase try again !");
+                    Console.WriteLine("");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine("Password isn't match, Please Try Again!");
+                    Console.WriteLine("++++++++++++++++++++++++++++++++++");
                 }
             }
             catch (KeyNotFoundException)
             {
-                Console.WriteLine("Cant fint your ID, Plase try again !");
+                Console.WriteLine("");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("ID Not Found, Please Try Again!");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++");
             }
 
 
@@ -211,19 +241,31 @@ namespace Authentication_MCC59
 
             if (!hashNumber.IsMatch(input))
             {
-                Console.WriteLine("Pasword must have at least  1 numeric value");
+                Console.WriteLine("");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Password Must Have at Least 1 Numeric Value");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
             }
             else if (!upperChar.IsMatch(input))
             {
-                Console.WriteLine("Pasword must have at least  1 upper case (A-Z)");
+                Console.WriteLine("");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Password Must Have at Least 1 Upper Case (A-Z)");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++");
             }
             else if (!loweChar.IsMatch(input))
             {
-                Console.WriteLine("Pasword must have at least  1 lower case (a-z)");
+                Console.WriteLine("");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Password Must Have at Least 1 Lower Case (a-z)");
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++");
             }
             else if (input.Length < passwordLength)
             {
-                Console.WriteLine("Pasword must be at least 8 character");
+                Console.WriteLine("");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Password Must Have at Least 8 Character Consist of 1 Upper Case, 1 Lower Case, 1 Numeric Value");
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             }
             else
             {
@@ -247,8 +289,10 @@ namespace Authentication_MCC59
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("Pasword at least 8 character alphanumeric, one lower case and one upper case");
-                    Console.WriteLine("Please try again");
+                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine("Password Must Have at Least 8 Character Consist of 1 Upper Case, 1 Lower Case, 1 Numeric Value");
+                    Console.WriteLine("Please Reinsert The Password :)");
+                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     Console.Write("Input Password   :");
                     passwordTemp = Console.ReadLine();
                 }
@@ -261,16 +305,25 @@ namespace Authentication_MCC59
         {
             ShowUserData();
             Console.WriteLine(" ");
-            Console.Write("Delete Data Ke (Input Angka) :");
+            Console.WriteLine("++++++ Delete User ++++++");
+            Console.WriteLine("+++++++++++++++++++++++++++");
+            Console.Write("Delete Data (Input Number) :");
             string Name = Console.ReadLine();
             if (confidential.ContainsKey(Name))
             {
                 confidential.Remove(Name);
+                Console.WriteLine("");
+                Console.WriteLine("\t+++++++++++++++++++++++++++");
+                Console.WriteLine("\tData Deleted!");
+                Console.WriteLine("\t+++++++++++++++++++++++++++");
             }
             else
             {
                 Console.Clear();
-                Console.WriteLine("Username Not Found");
+                Console.WriteLine("");
+                Console.WriteLine("\t+++++++++++++++++++++++++++");
+                Console.WriteLine("\tID Not Found");
+                Console.WriteLine("\t+++++++++++++++++++++++++++");
             }
             ShowUserData();
                 
@@ -283,7 +336,7 @@ namespace Authentication_MCC59
             while(start)
             {
                 MenuEdit();
-                Console.Write("Choose your action : ");
+                Console.Write("Choose Your Action : ");
                 int choose = NumInput();
                 switch (choose)
                 {
@@ -325,11 +378,11 @@ namespace Authentication_MCC59
             //test
             public static void ReadPassword2()
             {
-                Console.WriteLine("Pls key in your Login ID");
+                Console.Write("Input ID :");
                 var loginid = Console.ReadLine();
-                Console.WriteLine("Pls key in your Password");
+                Console.Write("Input Password : ");
                 var password = ReadPassword();
-                Console.Write("Your Password is:" + password);
+                Console.Write("Your Password :" + password);
                 Console.ReadLine();
             }
 
